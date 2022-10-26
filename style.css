@@ -1,0 +1,47 @@
+
+body {
+  font-family: Arial;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+.point{
+  stroke-width: 0px;
+}
+
+.point:hover {
+  fill: limegreen;
+}
+
+.bar {
+  fill: skyblue;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+
+#col1 {
+  width: 33.3%;
+}
+
+#col2 {
+  width: 33.4%;
+}
+
+#col3 {
+  width: 33.3%;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: lightblue;
+  border:  solid;
+  border-width: 2px;
+  border-radius: 5px;
+  padding: 5px;
+}
