@@ -24,6 +24,13 @@ const WIDTHSCATTERFRAME = d3.select("#width_scatter")
 					.attr("width", FRAME_WIDTH)
 					.attr("class", "frame");
 
+//frame being used for species bar plot
+const BARFRAME = d3.select("#bar_vis")
+				.append("svg")
+					.attr("height", FRAME_HEIGHT)
+					.attr("width", FRAME_WIDTH)
+					.attr("class", "frame");
+
 
 //scale for x-axis of length scatterplot
 const SEPAL_LENGTH_SCALE = d3.scaleLinear()
@@ -79,5 +86,16 @@ d3.csv("data/iris.csv").then((data) => {
 				.attr("data-x", (d) => {return d.Sepal_Width})
 				.attr("data-y", (d) => {return d.Petal_Width})
 				.style("fill",  (d) => {return COLOR_SCALE(d.Species)});
+	
+	//creating barframe
+	BARFRAME.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+                .attr("x", (d) => {return X_SCALE_BAR(d.category) + MARGINS.left;})
+                .attr("y", (d) => { return VIS_HEIGHT - Y_SCALE_BAR(d.amount);})
+                .attr("width", BAR_WIDTH)
+                .attr("height", (d) => { return Y_SCALE_BAR(d.amount); })
+                .attr("class", "bar");
 				
 });
