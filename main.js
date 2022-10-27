@@ -5,8 +5,8 @@ const MARGINS = {left:50, right:50, top:25, bottom:25}
 const VIS_HEIGHT = FRAME_HEIGHT - MARGINS.top - MARGINS.bottom;
 const VIS_WIDTH = FRAME_WIDTH - MARGINS.left - MARGINS.right;
 
-const SETOSA_COLOR = "red";
-const VERSICOLOR_COLOR = "green";
+const SETOSA_COLOR = "limegreen";
+const VERSICOLOR_COLOR = "darkmagenta";
 const VIRGINICA_COLOR = "blue";
 
 
@@ -141,12 +141,23 @@ d3.csv("data/iris.csv").then((data) => {
 	  // Function that is triggered when brushing is performed
 	  function updateChart() {
 	    extent = d3.brushSelection(this);
-	    console.log(extent);
 	    lengthscatter.classed("selected", (d) => {
-	    	return isBrushed(extent, SEPAL_WIDTH_SCALE(d.Sepal_Width) + MARGINS.left, PETAL_WIDTH_SCALE(d.Petal_Width)); } )
+	    	return isBrushed(extent, SEPAL_WIDTH_SCALE(d.Sepal_Width) + MARGINS.left, PETAL_WIDTH_SCALE(d.Petal_Width)); } );
 	    widthscatter.classed("selected", (d) => {
-	    	return isBrushed(extent, SEPAL_WIDTH_SCALE(d.Sepal_Width) + MARGINS.left, PETAL_WIDTH_SCALE(d.Petal_Width)); } )
-	    
+	    	return isBrushed(extent, SEPAL_WIDTH_SCALE(d.Sepal_Width) + MARGINS.left, PETAL_WIDTH_SCALE(d.Petal_Width)); } );
+    	barPlot.classed("selected", (d) => {
+	    		return barBrushed(extent, d);})
+	  }
+
+	  function barBrushed(brush_coords, bar) {
+	  	let anyPointBrushed = false;
+	  	for (let n = 0; n < 150; n++) {
+	  		point = data[n];
+	  		if (isBrushed(brush_coords, SEPAL_WIDTH_SCALE(point.Sepal_Width) + MARGINS.left, PETAL_WIDTH_SCALE(point.Petal_Width)) ) {
+	  			anyPointBrushed = anyPointBrushed || (point.Species == bar.Species);
+	  		}
+	  	}
+	  	return anyPointBrushed;
 	  }
 
 	   // A function that return TRUE or FALSE according if a dot is in the selection or not
@@ -179,13 +190,31 @@ d3.csv("data/iris.csv").then((data) => {
 	console.log(versicolor_count);
 	console.log(virginica_count);
 
+	let barArray = [{"Species": "setosa", "Count": setosa_count},
+					{"Species": "versicolor", "Count": versicolor_count},
+					{"Species": "virginica", "Count": virginica_count}];
 
+	let barPlot = BARFRAME.selectAll("rect")
+					.data(barArray)
+					.enter()
+					.append("rect")
+					    .attr("x", (d) => {return X_SCALE_BAR(d.Species) + MARGINS.left*1.25;})
+					    .attr("y", (d) => { return VIS_HEIGHT - Y_SCALE_BAR(d.Count);})
+					    .attr("width", BAR_WIDTH)
+					    .attr("height", (d) => { return Y_SCALE_BAR(d.Count); })
+					    .attr("fill", (d) => {return COLOR_SCALE(d.Species);})
+					    .attr("class", "bar")
+					    .style("opacity", 0.5);
+
+	console.log(barPlot);
+/*
 	BARFRAME.append("rect")
                 .attr("x", MARGINS.left*1.4)
                 .attr("y", FRAME_HEIGHT - MARGINS.bottom*2 - Y_SCALE_BAR(setosa_count))
                 .attr("width", BAR_WIDTH)
                 .attr("height", Y_SCALE_BAR(setosa_count))
                 .attr("class", "bar")
+                .attr("id", "setosa")
                 .style("fill", SETOSA_COLOR)
                 .style("opacity", 0.5);
 	BARFRAME.append("rect")
@@ -194,6 +223,7 @@ d3.csv("data/iris.csv").then((data) => {
                 .attr("width", BAR_WIDTH)
                 .attr("height", Y_SCALE_BAR(versicolor_count))
                 .attr("class", "bar")
+                .attr("id", "versicolor")
                 .style("fill", VERSICOLOR_COLOR)
                 .style("opacity", 0.5);
 	BARFRAME.append("rect")
@@ -202,9 +232,10 @@ d3.csv("data/iris.csv").then((data) => {
                 .attr("width", BAR_WIDTH)
                 .attr("height", Y_SCALE_BAR(virginica_count))
                 .attr("class", "bar")
+                .attr("id", "virginica")
                 .style("fill", VIRGINICA_COLOR)
                 .style("opacity", 0.5);
-
+*/
     //adding x-axis
     BARFRAME.append("g")
         .attr("transform", 

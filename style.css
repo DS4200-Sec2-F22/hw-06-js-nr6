@@ -11,14 +11,6 @@ h1, h2 {
   stroke-width: 0px;
 }
 
-.point:hover {
-  fill: limegreen;
-}
-
-.bar {
-  fill: skyblue;
-}
-
 .flex-container {
   display: flex;
   flex-direction: row;
@@ -37,17 +29,9 @@ h1, h2 {
   width: 33.3%;
 }
 
-.tooltip {
-  position: absolute;
-  background-color: lightblue;
-  border:  solid;
-  border-width: 2px;
-  border-radius: 5px;
-  padding: 5px;
-}
 
 .selected {
   opacity: 1 !important; 
-  stroke: black;
-  stroke-width: 1px;
+  stroke: orange;
+  stroke-width: 2px;
 }
