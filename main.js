@@ -105,6 +105,7 @@ d3.csv("data/iris.csv").then((data) => {
 			.call(d3.axisLeft(PETAL_LENGTH_SCALE).ticks(7))
 			.attr("font-size", "20px");
 
+
 	//appending width points 
 	let widthscatter = WIDTHSCATTERFRAME.selectAll("circle")
 			.data(data)
@@ -133,9 +134,9 @@ d3.csv("data/iris.csv").then((data) => {
 
 
 	//add brushing
-	WIDTHSCATTERFRAME.call( d3.brush()                 // Add the brush feature using the d3.brush function
-	      .extent( [ [0,0], [FRAME_WIDTH,FRAME_HEIGHT] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-	      .on("start brush", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
+	WIDTHSCATTERFRAME.call( d3.brush()                 
+	      .extent([[0,0], [FRAME_WIDTH,FRAME_HEIGHT]])
+	      .on("start brush", updateChart)
 	    )
 
 	  // Function that is triggered when brushing is performed
@@ -149,6 +150,7 @@ d3.csv("data/iris.csv").then((data) => {
 	    		return barBrushed(extent, d);})
 	  }
 
+	  //checks whether any points corresponding to a given bar are selected
 	  function barBrushed(brush_coords, bar) {
 	  	let anyPointBrushed = false;
 	  	for (let n = 0; n < 150; n++) {
@@ -169,6 +171,7 @@ d3.csv("data/iris.csv").then((data) => {
 	      return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
 	  }
 
+	//counting the number of each species in the dataset
 	let setosa_count = 0;
 	let versicolor_count = 0;
 	let virginica_count = 0;
@@ -186,9 +189,6 @@ d3.csv("data/iris.csv").then((data) => {
 				break;
 		}
 	}
-	console.log(setosa_count);
-	console.log(versicolor_count);
-	console.log(virginica_count);
 
 	let barArray = [{"Species": "setosa", "Count": setosa_count},
 					{"Species": "versicolor", "Count": versicolor_count},
@@ -206,44 +206,14 @@ d3.csv("data/iris.csv").then((data) => {
 					    .attr("class", "bar")
 					    .style("opacity", 0.5);
 
-	console.log(barPlot);
-/*
-	BARFRAME.append("rect")
-                .attr("x", MARGINS.left*1.4)
-                .attr("y", FRAME_HEIGHT - MARGINS.bottom*2 - Y_SCALE_BAR(setosa_count))
-                .attr("width", BAR_WIDTH)
-                .attr("height", Y_SCALE_BAR(setosa_count))
-                .attr("class", "bar")
-                .attr("id", "setosa")
-                .style("fill", SETOSA_COLOR)
-                .style("opacity", 0.5);
-	BARFRAME.append("rect")
-                .attr("x", 1.25 * BAR_WIDTH + MARGINS.left*1.5)
-                .attr("y", FRAME_HEIGHT - MARGINS.bottom*2 - Y_SCALE_BAR(versicolor_count))
-                .attr("width", BAR_WIDTH)
-                .attr("height", Y_SCALE_BAR(versicolor_count))
-                .attr("class", "bar")
-                .attr("id", "versicolor")
-                .style("fill", VERSICOLOR_COLOR)
-                .style("opacity", 0.5);
-	BARFRAME.append("rect")
-                .attr("x", 2.5 * BAR_WIDTH + MARGINS.left*1.6)
-                .attr("y", FRAME_HEIGHT - MARGINS.bottom*2 - Y_SCALE_BAR(virginica_count))
-                .attr("width", BAR_WIDTH)
-                .attr("height", Y_SCALE_BAR(virginica_count))
-                .attr("class", "bar")
-                .attr("id", "virginica")
-                .style("fill", VIRGINICA_COLOR)
-                .style("opacity", 0.5);
-*/
-    //adding x-axis
+    //adding x-axis to bar plot
     BARFRAME.append("g")
         .attr("transform", 
               "translate(" + MARGINS.left + "," + VIS_HEIGHT + ")")
         .call(d3.axisBottom(X_SCALE_BAR).ticks(7))
             .attr("font-size", "20px");
 
-    //adding y-axis
+    //adding y-axis to bar plot
     BARFRAME.append("g")
     	.attr("transform",
     			"translate(" + MARGINS.left + "," + "0" + ")")
